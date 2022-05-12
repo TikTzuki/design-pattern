@@ -155,4 +155,4 @@ REDIS = RedisSettings()
 
 SERVICE = ServiceSettings()
 
-cx_Oracle.init_oracle_client(lib_dir=os.getenv("LD_LIBRARY_PATH"))
+# cx_Oracle.init_oracle_client(lib_dir=os.getenv("LD_LIBRARY_PATH"))

@@ -48,14 +48,9 @@ class {functions.to_pascal_case(self.id)}(State):
     def accessible_permissions(self) -> PermissionSchema:
         return {permission_str}
 
-    def next_state(self, action: EAction, path: str) -> 'State':
-        next_state = self.possible_states.get(action)
+    async def next_state(self, request:NextStateRequest) -> 'State':
+        next_state = (await self.possible_states()).get(request.action)
         if not next_state:
-            logger.debug(f"action: {chr(123)}action{chr(125)}, path: {chr(123)}path{chr(125)}, action cant move to next state")
-            raise LOSException.with_error(loc=["next_state"], code=error_code.CANNOT_CHANGE_STATE, status_code=status.HTTP_412_PRECONDITION_FAILED)
-
-        if not self.compare_path(path, next_state["path"]):
-            logger.debug("path not match next state")
             raise LOSException.with_error(loc=["next_state"], code=error_code.CANNOT_CHANGE_STATE, status_code=status.HTTP_412_PRECONDITION_FAILED)
 
         clazz = self.get_class_from_state_id(next_state["id"])
@@ -63,17 +58,15 @@ class {functions.to_pascal_case(self.id)}(State):
         ctx.set_state(clazz(ctx, pre_transition_id=next_state["transition_id"]))
         return ctx.state
 
-    def _hide_if_done_have_permission(self, possible_state: Dict, permission) -> Dict:
-        username_has_write_permission = self.ctx.allocate.get_user_identity_by_role(permission)
-        return possible_state if (username_has_write_permission == self.ctx.user.identity) else {chr(123) + chr(125)}
-        
-    @property
-    def possible_states(self) -> Dict:
+    async def possible_states(self, **kwargs) -> Dict:
         write_permission = self.accessible_permissions.write[0]
-        return self._hide_if_done_have_permission(
-            {chr(123)}
+        guide = {chr(123)}
             {possible_states_str}
-            {chr(125)},
-            write_permission
+            {chr(125)}
+        return await self._filter_pipeline(
+            guide,
+            [self._permission_filter],
+            permission=write_permission,
+            **kwargs
         )
         """

@@ -20,12 +20,11 @@ CBV_CLASS_KEY = "__cbv_class__"
 
 class Base(metaclass=abc.ABCMeta):
 
-    def __init__(self, request: Request = None, session: Session = Depends()):
+    def __init__(self, request: Request = None):
         self.raw_errors: List[ErrorList] = []
         self.model = CustomBaseModel
         self._error_cache: Optional[List[Dict[str, Any]]] = None
         self.request = request
-        self.session = session
 
     def errors(self) -> List[Dict[str, Any]]:
         if self._error_cache is None:

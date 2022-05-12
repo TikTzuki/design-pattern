@@ -1,0 +1,78 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "TUNN",
+      "password": "Admin@123",
+      "roles": [
+        {
+          "role_code": "EMPLOYEE",
+          "permissions": [
+            {
+              "permission_code": "CREATE"
+            },
+            {
+              "permission_code": "DELETE"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "username": "BICHCHI",
+      "password": "Admin@123",
+      "roles": [
+        {
+          "role_code": "CONTROLLER",
+          "permissions": [
+            {
+              "permission_code": "CONTROL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "username": "LONGTPT",
+      "password": "Admin@123",
+      "roles": [
+        {
+          "role_code": "APPROVER",
+          "permissions": [
+            {
+              "permission_code": "APPROVE"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "documents": [
+    {
+      "id": 1,
+      "content": {
+        "price": 1000
+      }
+    },
+    {
+      "id": 2,
+      "content": {
+        "price": 20000
+      }
+    },
+    {
+      "id": 3,
+      "content": {
+        "price": 30000
+      }
+    },
+    {
+      "id": 4,
+      "content": {
+        "price": 4000
+      }
+    }
+  ]
+}

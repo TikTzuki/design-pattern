@@ -63,7 +63,9 @@
         </camunda:formData>
       </bpmn:extensionElements>
     </bpmn:startEvent>
-    <bpmn:sequenceFlow id="sid-36eda52d-fe56-493f-928b-c3990d7e4a4a" sourceRef="s1_a1_start_event" targetRef="init"/>
+    <bpmn:sequenceFlow id="sid-36eda52d-fe56-493f-928b-c3990d7e4a4a" sourceRef="s1_a1_start_event" targetRef="init" name="save">
+      <documentation>Lưu</documentation>
+    </bpmn:sequenceFlow>
     <bpmn:endEvent id="closed" name="Hồ sơ đã đóng">
       <incoming>sid-f2a26786-dfd7-4190-9fbd-4634b23803c2</incoming>
       <incoming>sid-b5b6a0c3-d8c1-4c97-8beb-6461e606ce1a</incoming>

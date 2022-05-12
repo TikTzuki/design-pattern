@@ -58,13 +58,13 @@ class Store:
                         "from typing import Dict",
                         "from loguru import logger",
                         "from starlette import status",
-                        "from apps.workflow.states.base import State",
+                        "from state_pattern.states.base import State, NextStateRequest",
                         "from project.core import LOSException, error_code",
-                        "from apps.workflow.states.base import PermissionSchema",
+                        "from state_pattern.states.base import PermissionSchema",
                         "from project.utils.constants.workflow.permission import EDocRole",
-                        "from apps.workflow.constants.path import EPath",
-                        "from apps.workflow.constants.state import EState",
-                        "from apps.workflow.constants.transition import ETransition",
+                        "from state_pattern.constants.path import EPath",
+                        "from state_pattern.constants.state import EState",
+                        "from state_pattern.constants.transition import ETransition",
                         "from project.utils.constants.workflow.action import EAction",
                     ])
                     # + "\n\n".join(sorted(set(map(lambda s: s.to_state(), states))))
