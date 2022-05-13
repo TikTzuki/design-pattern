@@ -7,6 +7,7 @@ from starlette import status
 from starlette.datastructures import URL
 
 from project.core import LOSException, service, Service, error_code
+from project.utils.constants.workflow.permission import EDocRole
 from state_pattern.constants.state import EState
 from state_pattern.constants.action import EAction
 from state_pattern.repositories import DocumentRepository
@@ -17,25 +18,6 @@ from state_pattern.states.base import NextStateRequest, State
 @service
 class WorkflowService(Service):
     document_repos: DocumentRepository = Depends(DocumentRepository)
-
-    async def save(self, id, document: SimpleDoc) -> SimpleDoc:
-        document.id = id
-        return SimpleDoc.parse_obj(await self.document_repos.save(document.dict()))
-
-    async def apply_control(self, id):
-        ...
-
-    async def apply_approve(self, id):
-        ...
-
-    async def approve(self, id):
-        ...
-
-    async def return_init(self, id):
-        ...
-
-    async def close(self, id):
-        ...
 
     async def state_interpreter(self, los_id: str, url: URL, action: EAction = None, request: NextStateRequest = None, *args, **kwargs) -> str:
         if not request:
@@ -85,8 +67,17 @@ class WorkflowService(Service):
         elif not doc.state_id and (request and request.action == EAction.save):
             state_id = EState.s1_a1_start_event
         else:
-            raise LOSException.with_error(loc=["path", "los_id"], code=error_code.ID_NOT_FOUND, id=doc_id)
+            raise LOSException.with_error(loc=["path", "id"], code=error_code.ID_NOT_FOUND, id=doc_id)
 
         clazz = State.get_class_from_state_id(state_id)
         doc.set_state(clazz(doc))
         return doc.state
+
+    async def state_guide(self, doc_id: int) -> Dict:
+        current_state = await self._get_current_state(doc_id)
+        button_map = {key: {"id": value["id"], "transition_id": value["transition_id"]} for key, value in (await current_state.possible_states()).items()}
+        state_guide = {
+            "current_state_id": current_state.state_id,
+            "guide": button_map,
+        }
+        return state_guide

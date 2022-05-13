@@ -1,18 +1,16 @@
 import abc
-import functools
 import inspect
 from itertools import chain
-from typing import Dict, Optional, Type, List, Any, TypeVar, Iterable
+from typing import Dict, Optional, Type, List, Any, TypeVar
 
 from fast_boot.schemas import AbstractUser
 from pydantic import Field
-from sqlalchemy.orm import Session
 
-from state_pattern import states
-from state_pattern.constants.state import EState
 from project.core import CustomBaseModel
 from project.utils import functions
-from project.utils.constants.workflow.action import EAction
+from state_pattern import states
+from state_pattern.constants.action import EAction
+from state_pattern.constants.state import EState
 
 
 class Context(metaclass=abc.ABCMeta):
@@ -101,12 +99,8 @@ class State(metaclass=abc.ABCMeta):
         return possible_state if is_granted_permissions else {}
 
     async def _approve_official_filter(self, possible_state: Dict, **kwargs) -> Dict:
-        if self.ctx.form.collateral_form.ignore_collateral:
-            remove_actions = [EAction.accept_official, EAction.deny_official]
-        else:
-            remove_actions = [EAction.accept_unofficial, EAction.deny_unofficial]
-        for key in remove_actions:
-            possible_state.pop(key, None)
+        if self.ctx.content.price < 0:
+            possible_state.pop(EAction.approve, None)
         return possible_state
 
     async def _filter_pipeline(self, possible_state, filters: List, **kwargs):

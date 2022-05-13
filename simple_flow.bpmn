@@ -2,11 +2,11 @@
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_02m23tv" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.10.0">
   <bpmn:process id="states" name="states" isExecutable="true">&gt;
     <bpmn:userTask id="init" name="Khai báo hồ sơ">
-      <documentation><![CDATA[                {
+      <bpmn:documentation><![CDATA[{
                 "roles": ["CREATE"],
                 "state_group": "CREATE",
                 "is_start_node": false
-                }]]></documentation>
+                }]]></bpmn:documentation>
       <outgoing>sid-11829be3-f5c8-42da-9053-ce91115d7995</outgoing>
       <incoming>sid-36eda52d-fe56-493f-928b-c3990d7e4a4a</incoming>
     </bpmn:userTask>

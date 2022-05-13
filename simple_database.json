@@ -52,27 +52,11 @@
   "documents": [
     {
       "id": 1,
+      "state_id": "approving",
       "content": {
-        "price": 1000
-      }
-    },
-    {
-      "id": 2,
-      "content": {
-        "price": 20000
-      }
-    },
-    {
-      "id": 3,
-      "content": {
-        "price": 30000
-      }
-    },
-    {
-      "id": 4,
-      "content": {
-        "price": 4000
-      }
+        "price": -1
+      },
+      "_user": null
     }
   ]
 }

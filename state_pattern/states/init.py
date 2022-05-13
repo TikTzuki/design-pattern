@@ -15,7 +15,7 @@ class Init(State):
     @property
     def accessible_permissions(self) -> PermissionSchema:
         return PermissionSchema(
-            write=[]
+            write=[EDocRole.CREATE]
         )
         
 

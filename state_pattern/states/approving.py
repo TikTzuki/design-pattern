@@ -9,6 +9,8 @@ from state_pattern.constants.path import EPath
 from state_pattern.constants.state import EState
 from state_pattern.constants.transition import ETransition
 from project.utils.constants.workflow.action import EAction
+
+
 class Approving(State):
     _state_id = EState.approving
 
@@ -17,9 +19,8 @@ class Approving(State):
         return PermissionSchema(
             write=[EDocRole.APPROVE]
         )
-        
 
-    async def next_state(self, request:NextStateRequest) -> 'State':
+    async def next_state(self, request: NextStateRequest) -> 'State':
         next_state = (await self.possible_states()).get(request.action)
         if not next_state:
             raise LOSException.with_error(loc=["next_state"], code=error_code.CANNOT_CHANGE_STATE, status_code=status.HTTP_412_PRECONDITION_FAILED)
@@ -32,26 +33,25 @@ class Approving(State):
     async def possible_states(self, **kwargs) -> Dict:
         write_permission = self.accessible_permissions.write
         guide = {
-            EAction.return_init: { 
-"id": EState.init, 
-"transition_id": ETransition.approving_return_init_init, 
-"path": EPath.return_init_path, 
-},
-EAction.approve: { 
-"id": EState.disbursement, 
-"transition_id": ETransition.approving_approve_disbursement, 
-"path": EPath.approve_path, 
-},
-EAction.close: { 
-"id": EState.closed, 
-"transition_id": ETransition.approving_close_closed, 
-"path": EPath.close_path, 
-}
+            EAction.return_init: {
+                "id": EState.init,
+                "transition_id": ETransition.approving_return_init_init,
+                "path": EPath.return_init_path,
+            },
+            EAction.approve: {
+                "id": EState.disbursement,
+                "transition_id": ETransition.approving_approve_disbursement,
+                "path": EPath.approve_path,
+            },
+            EAction.close: {
+                "id": EState.closed,
+                "transition_id": ETransition.approving_close_closed,
+                "path": EPath.close_path,
             }
+        }
         return await self._filter_pipeline(
             guide,
-            [self._permission_filter],
+            [self._permission_filter, self._approve_official_filter],
             permissions=write_permission,
             **kwargs
         )
-        

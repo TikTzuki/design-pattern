@@ -30,7 +30,8 @@ class AbstractRepository(Base, abc.ABC):
     async def __insert(self, obj: Dict) -> Dict:
         f = open(self.db, "r")
         session = json.load(f)
-        prev_id = (await self.find_last())["id"]
+        prev_obj_opt = (await self.find_last())
+        prev_id = prev_obj_opt["id"] if prev_obj_opt else 0
         obj.update({"id": prev_id + 1})
         session[self.table].append(obj)
         json.dump(session, open(self.db, "w"))
