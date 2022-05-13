@@ -297,4 +297,4 @@ def json_dumps(obj: Dict) -> bytes:
 
 def debug(msg):
     if logging.getLogger().level == logging.DEBUG:
-        return logger.debug(msg)
+        return logger.opt(depth=1).debug(msg)
