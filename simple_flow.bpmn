@@ -2,13 +2,18 @@
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_02m23tv" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.10.0">
   <bpmn:process id="states" name="states" isExecutable="true">&gt;
     <bpmn:userTask id="init" name="Khai báo hồ sơ">
+      <documentation><![CDATA[                {
+                "roles": ["CREATE"],
+                "state_group": "CREATE",
+                "is_start_node": false
+                }]]></documentation>
       <outgoing>sid-11829be3-f5c8-42da-9053-ce91115d7995</outgoing>
       <incoming>sid-36eda52d-fe56-493f-928b-c3990d7e4a4a</incoming>
     </bpmn:userTask>
     <bpmn:userTask id="controlling" name="Hồ sơ đang kiểm soát">
       <bpmn:documentation><![CDATA[{
-                "roles": ["CONTROLLER_BRANCH"],
-                "state_group": "CONTROLLER_BRANCH",
+                "roles": ["CONTROL"],
+                "state_group": "CONTROL",
                 "is_start_node": false
                 }]]></bpmn:documentation>
       <outgoing>sid-e7a196d5-188e-4634-9d76-0f1949a9f3cf</outgoing>
@@ -16,8 +21,8 @@
     </bpmn:userTask>
     <bpmn:userTask id="approving" name="Hồ sơ đang phê duyệt">
       <bpmn:documentation><![CDATA[{
-                "roles": ["APPROVER_BRANCH"],
-                "state_group": "APPROVER_BRANCH",
+                "roles": ["APPROVE"],
+                "state_group": "APPROVE",
                 "is_start_node": false
                 }]]></bpmn:documentation>
       <outgoing>sid-87965f5d-0cad-47d6-a976-e3ba49fa5022</outgoing>
@@ -52,8 +57,8 @@
     </bpmn:sequenceFlow>
     <bpmn:startEvent id="s1_a1_start_event" name="s1_a1_start_event">
       <bpmn:documentation><![CDATA[                {
-                "roles": ["INITIALIZER"],
-                "state_group": "INITIALIZER",
+                "roles": ["CREATE"],
+                "state_group": "CREATE",
                 "is_start_node": true
                 }]]></bpmn:documentation>
       <outgoing>sid-36eda52d-fe56-493f-928b-c3990d7e4a4a</outgoing>

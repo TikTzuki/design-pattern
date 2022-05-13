@@ -1,5 +1,7 @@
 import abc
+import functools
 import inspect
+from itertools import chain
 from typing import Dict, Optional, Type, List, Any, TypeVar, Iterable
 
 from fast_boot.schemas import AbstractUser
@@ -93,10 +95,10 @@ class State(metaclass=abc.ABCMeta):
         clazz_name, clazz = rs.pop()
         return clazz
 
-    async def _permission_filter(self, possible_state: Dict, permission, **kwargs) -> Dict:
-        permissions = [role.permissions for role in self.ctx.user.role_hierarchy.roles]
-        print(permissions)
-        return possible_state if self.ctx.user.identity in permissions else {}
+    async def _permission_filter(self, possible_state: Dict, permissions, **kwargs) -> Dict:
+        granted_permissions = set(chain(*[role.permissions for role in self.ctx.user.role_hierarchy.roles]))
+        is_granted_permissions = granted_permissions - set(permissions) != granted_permissions
+        return possible_state if is_granted_permissions else {}
 
     async def _approve_official_filter(self, possible_state: Dict, **kwargs) -> Dict:
         if self.ctx.form.collateral_form.ignore_collateral:
@@ -109,6 +111,7 @@ class State(metaclass=abc.ABCMeta):
 
     async def _filter_pipeline(self, possible_state, filters: List, **kwargs):
         for filter_func in filters:
+            print(possible_state)
             possible_state = await filter_func(possible_state, **kwargs)
             functions.debug(f"func filter: {filter_func}, {possible_state}")
         return possible_state

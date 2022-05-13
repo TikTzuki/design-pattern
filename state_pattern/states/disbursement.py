@@ -30,14 +30,14 @@ class Disbursement(State):
         return ctx.state
 
     async def possible_states(self, **kwargs) -> Dict:
-        write_permission = self.accessible_permissions.write[0]
+        write_permission = self.accessible_permissions.write
         guide = {
             
             }
         return await self._filter_pipeline(
             guide,
             [self._permission_filter],
-            permission=write_permission,
+            permissions=write_permission,
             **kwargs
         )
         

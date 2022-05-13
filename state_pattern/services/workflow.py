@@ -63,20 +63,18 @@ class WorkflowService(Service):
         # functions.debug(data)
         request = data["state_request"]
         action = request["action"]
-        position = request["position"]
         target_state_dict = data["target_state"]
 
         if new_document:
             ctx = target_state_dict["ctx"]
             target_state_dict["ctx"] = new_document
             target_state_dict["ctx"]["_user"] = ctx["_user"]
-            target_state_dict["ctx"]["_allocate"] = ctx["_allocate"]
 
         target_state_id = target_state_dict["_state_id"]
         clazz = State.get_class_from_state_id(target_state_id)
         target_state = clazz.from_dict(target_state_dict, SimpleDoc)
         # await self.__log_state(target_state, action, position)
-        await self.document_repos.update_normal_document(target_state.ctx.identity, {"state_id": target_state.state_id})
+        await self.document_repos.save({"id": target_state.ctx.identity, "state_id": target_state.state_id})
 
     async def _get_current_state(self, doc_id: int, request: NextStateRequest = None) -> State:
         doc = await self.document_repos.find_by_id(doc_id)

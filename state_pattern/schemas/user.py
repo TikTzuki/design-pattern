@@ -1,6 +1,7 @@
 from typing import List
 
 from fast_boot.schemas import AbstractUser
+from fast_boot.security.access import hierarchical_roles
 from fast_boot.security.access.hierarchical_roles import RoleHierarchy
 from pydantic import Field
 
@@ -8,7 +9,7 @@ from project.core import CustomBaseModel
 
 
 class Permission(CustomBaseModel):
-    permission_code: List[str] = Field([])
+    permission_code: str = Field(None)
 
 
 class Role(CustomBaseModel):
@@ -28,7 +29,9 @@ class User(AbstractUser):
 
     @property
     def role_hierarchy(self) -> RoleHierarchy:
-        pass
+        role_hierarchy = RoleHierarchy()
+        role_hierarchy.roles = list(map(lambda role: hierarchical_roles.Role(role.role_code, list(map(lambda p: p.permission_code, role.permissions))), self.roles))
+        return role_hierarchy
 
     @property
     def is_authenticated(self) -> bool:
