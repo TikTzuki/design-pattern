@@ -22,10 +22,25 @@ class ETab:
 
 
 @cbv(router)
-class Apis:
+class DocumentApis:
     request: Request
     workflow_service: WorkflowService = Depends(WorkflowService)
     service: DocumentService = Depends(DocumentService)
+
+    @router.get(
+        path="/documents",
+        tags=[ETab.STAFF, ETab.CONTROLLER, ETab.APPROVER]
+    )
+    async def get_all(self):
+        return await self.service.get_all_document()
+
+    @router.get(
+        path="/documents/{id}",
+        tags=[ETab.STAFF, ETab.CONTROLLER, ETab.APPROVER]
+    )
+    async def get_by_id(self, id: int):
+        data = await self.service.get_by_id(id)
+        return DataResponse(data)
 
     @router.post(
         path="/documents",

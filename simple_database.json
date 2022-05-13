@@ -52,11 +52,10 @@
   "documents": [
     {
       "id": 1,
-      "state_id": "approving",
+      "state_id": "init",
       "content": {
         "price": -1
-      },
-      "_user": null
+      }
     }
   ]
 }
